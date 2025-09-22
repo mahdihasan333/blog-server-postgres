@@ -28,6 +28,15 @@ const getUserById = async (req: Request, res: Response) => {
     }
 }
 
+const updateUser = async (req: Request, res: Response) => {
+    try {
+        const updatedUser = await UserService.updateUser(Number(req.params.id), req.body)
+        res.status(201).json(updatedUser);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 
 const deleteUser = async (req: Request, res: Response) => {
     try {
@@ -44,5 +53,6 @@ export const userController = {
     createUser,
     getAllFromDB,
     getUserById,
+    updateUser,
     deleteUser
 };

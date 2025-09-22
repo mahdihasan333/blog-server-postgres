@@ -1,4 +1,4 @@
-import { prisma } from "../../config/db";
+import { prisma } from '../../config/db';
 import { Prisma, User } from "@prisma/client";
 
 const createUser = async(payload: Prisma.UserCreateInput): Promise<User>=> {
@@ -50,6 +50,17 @@ const getUserById = async(id: number) => {
     return result;
 }
 
+const updateUser = async(id: number, payload: Prisma.UserUpdateInput): Promise<User> => {
+    const result = await prisma.user.update({
+        where: {
+            id
+        },
+        data: payload
+    })
+
+    return result;
+}
+
 const deleteUser = async(id: number) => {
     const result = await prisma.user.delete({
         where: {
@@ -63,5 +74,6 @@ export const UserService = {
     createUser,
     getAllFromDB,
     getUserById,
+    updateUser,
     deleteUser
 };

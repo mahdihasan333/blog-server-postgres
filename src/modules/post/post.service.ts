@@ -18,7 +18,12 @@ const createPost = async(payload: Prisma.PostCreateInput): Promise<Post> => {
 }
 
 
-const getAllPosts = async() => {
+const getAllPosts = async({
+    page, limit
+}: {
+    page: number,
+    limit: number
+}) => {
     const result = await prisma.post.findMany();
     return result;
 }
@@ -28,6 +33,9 @@ const getPostById = async(id: number) => {
     const result = await prisma.post.findUnique({
         where: {
             id
+        },
+        include: {
+            author: true
         }
     })
     return result;

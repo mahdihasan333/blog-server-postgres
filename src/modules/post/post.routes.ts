@@ -7,4 +7,6 @@ router.post('/', postController.createPost)
 
 router.get('/', postController.getAllPosts)
 
+router.get('/:id', postController.getPostById)
+
 export const postRoutes = router;

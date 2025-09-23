@@ -1,5 +1,5 @@
 import { Post, Prisma } from "@prisma/client"
-import { prisma } from "../../config/db"
+import { prisma } from '../../config/db';
 
 const createPost = async(payload: Prisma.PostCreateInput): Promise<Post> => {
     const createPost = await prisma.post.create({
@@ -17,6 +17,14 @@ const createPost = async(payload: Prisma.PostCreateInput): Promise<Post> => {
     return createPost;
 }
 
+
+const getAllPosts = async() => {
+    const result = await prisma.post.findMany();
+    return result;
+}
+
+
 export const PostService = {
-    createPost
+    createPost,
+    getAllPosts
 }

@@ -28,8 +28,19 @@ const getPostById = async(req: Request, res: Response) => {
     }
 }
 
+
+const deletePost = async(req: Request, res: Response) => {
+    try {
+        const result = await PostService.deletePost(Number(req.params.id))
+        res.status(201).json(result);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
 export const postController = {
     createPost,
     getAllPosts,
-    getPostById
+    getPostById,
+    deletePost
 }

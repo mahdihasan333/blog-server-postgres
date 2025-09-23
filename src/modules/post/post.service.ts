@@ -34,8 +34,18 @@ const getPostById = async(id: number) => {
 }
 
 
+const deletePost = async(id: number) => {
+    const result = await prisma.post.delete({
+        where: {
+            id
+        }
+    })
+    return result;
+}
+
 export const PostService = {
     createPost,
     getAllPosts,
-    getPostById
+    getPostById,
+    deletePost
 }

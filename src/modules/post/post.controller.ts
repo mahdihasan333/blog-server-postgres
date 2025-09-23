@@ -28,6 +28,15 @@ const getPostById = async(req: Request, res: Response) => {
     }
 }
 
+const updatePost = async(req: Request, res: Response) => {
+    try {
+        const result = await PostService.updatePost(Number(req.params.id), req.body);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
 
 const deletePost = async(req: Request, res: Response) => {
     try {
@@ -42,5 +51,6 @@ export const postController = {
     createPost,
     getAllPosts,
     getPostById,
+    updatePost,
     deletePost
 }

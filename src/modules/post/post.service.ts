@@ -19,12 +19,33 @@ const createPost = async(payload: Prisma.PostCreateInput): Promise<Post> => {
 
 
 const getAllPosts = async({
-    page, limit
+    page, limit, search
 }: {
     page: number,
-    limit: number
+    limit: number,
+    search: string
 }) => {
-    const result = await prisma.post.findMany();
+    const skip = (page - 1) * limit;
+    const result = await prisma.post.findMany({
+        skip,
+        take: limit,
+        where: {
+            OR: [
+                {
+                    title: {
+                        contains: search,
+                        mode: 'insensitive'
+                    }
+                },
+                {
+                    content: {
+                        contains: search,
+                        mode: 'insensitive'
+                    }
+                }
+            ]
+        }
+    });
     return result;
 }
 

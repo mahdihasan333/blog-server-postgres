@@ -22,7 +22,7 @@ const getAllPosts = async ({
   limit = 10,
   search,
   isFeatured,
-  tags
+  tags,
 }: {
   page?: number;
   limit?: number;
@@ -34,51 +34,59 @@ const getAllPosts = async ({
 
   const where: any = {
     AND: [
-        search && {
-            OR: [
-                { title: { contains: search, mode: 'insensitive' } },
-                {content: { contains: search, mode: 'insensitive' } }
-            ]
-        },
-        typeof isFeatured === 'boolean' && { isFeatured },
-        (tags && tags.length > 0) && {tags: {hasEvery: tags}}
-    ].filter(Boolean)
-  }
-
-
+      search && {
+        OR: [
+          { title: { contains: search, mode: "insensitive" } },
+          { content: { contains: search, mode: "insensitive" } },
+        ],
+      },
+      typeof isFeatured === "boolean" && { isFeatured },
+      tags && tags.length > 0 && { tags: { hasEvery: tags } },
+    ].filter(Boolean),
+  };
 
   const result = await prisma.post.findMany({
     skip,
     take: limit,
     where,
     orderBy: {
-        createdAt: 'desc'
-    }
+      createdAt: "desc",
+    },
   });
 
-  const total= await prisma.post.count({where});
+  const total = await prisma.post.count({ where });
 
   return {
     data: result,
     pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit)
-    }
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
   };
 };
 
 const getPostById = async (id: number) => {
-  const result = await prisma.post.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      author: true,
-    },
+  return await prisma.$transaction(async (tx) => {
+    await tx.post.update({
+      where: { id },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+    return await tx.post.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        author: true,
+      },
+    });
   });
-  return result;
+
 };
 
 const updatePost = async (

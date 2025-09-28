@@ -1,16 +1,20 @@
 import express from 'express';
-import { postController } from './post.controller';
+import { PostController } from './post.controller';
 
 const router = express.Router();
 
-router.post('/', postController.createPost)
+router.get("/stats", PostController.getBlogStat)
 
-router.get('/', postController.getAllPosts)
+router.post('/', PostController.createPost)
 
-router.get('/:id', postController.getPostById)
+router.get('/', PostController.getAllPosts)
 
-router.patch('/:id', postController.updatePost)
+router.get('/:id', PostController.getPostById)
 
-router.delete('/:id', postController.deletePost)
+router.patch('/:id', PostController.updatePost)
+
+router.delete('/:id', PostController.deletePost)
+
+
 
 export const postRoutes = router;
